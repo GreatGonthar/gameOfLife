@@ -6,10 +6,23 @@ canvas.width = 800;
 canvas.style = 'background:pink; border:1px solid black';
 document.body.appendChild(canvas);
 
-let size = 3;
-let interval = 1;
+
+let size = +document.getElementById("size").value;
+let colorFull = document.getElementById("colorFull").value;
+let colorEmpty = document.getElementById("colorEmpty").value;
+let fps = 1000 / +document.getElementById("fps").value;
+let interval = +document.getElementById("interval").value;
+let start = document.getElementById("start");
+let rndButton = document.getElementById("rnd");
 let strings = Math.round(canvas.height/(size+interval));
 let columns = Math.round(canvas.width/(size+interval));
+let min = +document.getElementById("rndMin").value;
+let max = +document.getElementById("rndMax").value;
+
+function rand(min, max) { 
+    let rand = min + Math.random() * (max - min);
+    return Math.floor(rand);
+  }
 class Cell {
     constructor(x, y, size, interval, colorOff, colorOn){
         this.x = x;
@@ -30,65 +43,68 @@ class Cell {
 let myCell = [];
 for (let i = 0; i < columns; i++){
     for (let j = 0; j < strings; j++){
-        myCell.push(new Cell(j*(size+interval), i*(size+interval), size, interval, '#c0c0c0', '#000000'));         
+        myCell.push(new Cell(j*(size+interval), i*(size+interval), size, interval, colorEmpty, colorFull));         
     }    
 }
 
-
-setInterval(mainLoop, 2);
-
 function mainLoop(){        
     for (let i = 0; i < myCell.length; i++){
-    //    if (i/columns == Math.floor(i/columns))
-            // проверяем наличие соседей, и добавляем их в счетчик
-            if (i > columns && (i/columns) != Math.floor(i/columns) && ((i+1)/columns) != Math.floor((i+1)/columns) && i < (columns * strings) - columns){
+        // проверяем наличие соседей, и добавляем их в счетчик
+        if (i > columns && (i/columns) != Math.floor(i/columns) && ((i+1)/columns) != Math.floor((i+1)/columns) && i < (columns * strings) - columns){
 
-                if (myCell[i+1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }                  
-                if (myCell[i+columns+1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }      
-                if (myCell[i-1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }
-                if (myCell[i+columns-1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                } 
-                if (myCell[i+columns].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }      
-                if (myCell[i-columns].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                } 
-                if (myCell[i-columns-1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }       
-                if (myCell[i-columns+1].mainColor == myCell[0].colorOn){
-                    myCell[i].neighbors++;                
-                }                    
+            if (myCell[i+1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            }                  
+            if (myCell[i+columns+1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            }      
+            if (myCell[i-1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
             }
-            if (myCell[i].mainColor == myCell[0].colorOff && myCell[i].neighbors == 3){
-                myCell[i].mainColor = myCell[0].colorOn;
-                // myCell[i].mainColor = 'red';
-                myCell[i].draw(); 
-                myCell[i].neighbors = 0;
+            if (myCell[i+columns-1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            } 
+            if (myCell[i+columns].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            }      
+            if (myCell[i-columns].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            } 
+            if (myCell[i-columns-1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
+            }       
+            if (myCell[i-columns+1].mainColor == myCell[0].colorOn){
+                myCell[i].neighbors++;                
             }
+        }
+    }
 
-            // if (myCell[i].mainColor == myCell[0].colorOn && myCell[i].neighbors > 3 || myCell[i].neighbors < 2){
-            //     myCell[i].mainColor = myCell[0].colorOff;
-            //     // myCell[i].draw(); 
-            //     // myCell[i].neighbors = 0;
-            // }
-
+    for (let i = 0; i < myCell.length; i++){
+        // в пустой клетке, рядом с которой ровно три живые клетки, зарождается жизнь
+        if (myCell[i].mainColor == myCell[0].colorOff && myCell[i].neighbors == 3){
+            myCell[i].mainColor = myCell[0].colorOn;
+        }
+        // если у живой клетки есть две или три живые соседки, то эта клетка продолжает жить; 
+        // в противном случае, если соседей меньше двух или больше трёх, клетка умирает («от одиночества» или «от перенаселённости»)
+        if (myCell[i].mainColor == myCell[0].colorOn && myCell[i].neighbors < 2 || myCell[i].neighbors > 3){
+            myCell[i].mainColor = myCell[0].colorOff;
+        }
         myCell[i].draw();    
-        // myCell[i].neighbors = 0;
-    }
+        myCell[i].neighbors = 0;    
+    }    
 }
+mainLoop();
+
+start.onclick = function(){
+    setInterval(mainLoop, fps);   
+};
+// TODO: реализовать случайные числа
+rndButton.onclick = function(){
+    let a = rand(0, myCell.length);    
+    console.log('TODO: реализовать случайные числа', a);
+};
+
 canvas.onmousedown = function(event){
-    if (event.shiftKey) {
-        console.log('зажали shift');
-    }
     console.log(event.clientX, event.clientY);
     let mouseX = event.clientX - 10;
     let mouseY = event.clientY - 10;
