@@ -11,18 +11,18 @@
     <fieldset style="position: absolute; top: 1px; right: 1px;">       
             <div><input type="color" id="colorFull" value="#000000" >Цвет живой клетки</div>
             <div><input type="color" id="colorEmpty" value="#c0c0c0" >Цвет пустой клетки</div>
-            <div><input type="number" id="size" value="20" min="3" max="100" >Размер клетки</div>
-            <div><input type="number" id="fps" value="20" min="1" max="60" >FPS</div>  
-            <div><input type="number" id="interval" value="1" min="0" max="100" >интервал между клеточками</div>
+            <div><input type="number" id="size" value="4" min="3" max="100" >Размер клетки</div>
+            <div><input type="number" id="fps" value="60" min="1" max="60" >FPS</div>  
+            <div><input type="number" id="interval" value="0" min="0" max="100" >интервал между клеточками</div>
             <fieldset>
                 <legend>нарисовать случайно</legend>
-                <div><input type="number" id="rndMin" value="10" min="0">минимум</div>
-                <div><input type="number" id="rndMax" value="100" min="0">максимум</div>
+                <div><input type="number" id="rndMinCells" value="3000" min="0">количество клеточек</div>                
                 <button id='rnd'>сгенерировать</button>
             </fieldset>
             <button id='start'>пуск</button>     
 
     </fieldset>
+    <script src="randomArr.js"></script>
     <script src="main.js"></script>
 </body>
 </html>

@@ -16,8 +16,8 @@ let start = document.getElementById("start");
 let rndButton = document.getElementById("rnd");
 let strings = Math.round(canvas.height/(size+interval));
 let columns = Math.round(canvas.width/(size+interval));
-let min = +document.getElementById("rndMin").value;
-let max = +document.getElementById("rndMax").value;
+let rndMinCells = +document.getElementById("rndMinCells").value;
+
 
 function rand(min, max) { 
     let rand = min + Math.random() * (max - min);
@@ -100,8 +100,15 @@ start.onclick = function(){
 };
 // TODO: реализовать случайные числа
 rndButton.onclick = function(){
-    let a = rand(0, myCell.length);    
-    console.log('TODO: реализовать случайные числа', a);
+    for (let i = 0; i < myCell.length; i++){
+        myCell[i].mainColor = myCell[0].colorOff;
+        myCell[i].draw();
+    } 
+    let a = randomAgain(rndMinCells, myCell.length);    
+    for (let i = 0; i < a.length; i++){
+        myCell[a[i]].mainColor = myCell[0].colorOn;
+        myCell[a[i]].draw(); 
+    }
 };
 
 canvas.onmousedown = function(event){
