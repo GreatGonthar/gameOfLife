@@ -132,6 +132,7 @@ start.onclick = function(){
 
 
 rndButton.onclick = function(){
+    rndMinCells = +document.getElementById("rndMinCells").value;
     for (let i = 0; i < myCell.length; i++){
         myCell[i].mainColor = myCell[0].colorOff;
         myCell[i].draw();
