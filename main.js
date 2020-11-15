@@ -6,6 +6,7 @@ canvas.width = 800;
 canvas.style = 'background:pink; border:1px solid black';
 document.body.appendChild(canvas);
 
+let timerId = 0;
 
 let size = +document.getElementById("size").value;
 let colorFull = document.getElementById("colorFull").value;
@@ -13,6 +14,7 @@ let colorEmpty = document.getElementById("colorEmpty").value;
 let fps = 1000 / +document.getElementById("fps").value;
 let interval = +document.getElementById("interval").value;
 let start = document.getElementById("start");
+let reStart = document.getElementById("reStart");
 let rndButton = document.getElementById("rnd");
 let strings = Math.round(canvas.height/(size+interval));
 let columns = Math.round(canvas.width/(size+interval));
@@ -95,10 +97,40 @@ function mainLoop(){
 }
 mainLoop();
 
-start.onclick = function(){
-    setInterval(mainLoop, fps);   
+reStart.onclick = function(){
+    size = +document.getElementById("size").value;
+    colorFull = document.getElementById("colorFull").value;
+    colorEmpty = document.getElementById("colorEmpty").value;
+    fps = 1000 / +document.getElementById("fps").value;
+    interval = +document.getElementById("interval").value;    
+    strings = Math.round(canvas.height/(size+interval));
+    columns = Math.round(canvas.width/(size+interval));
+    rndMinCells = +document.getElementById("rndMinCells").value;
+
+    myCell = [];
+    for (let i = 0; i < columns; i++){
+        for (let j = 0; j < strings; j++){
+        myCell.push(new Cell(j*(size+interval), i*(size+interval), size, interval, colorEmpty, colorFull));         
+        }    
+    }
+    ctx.fillStyle = myCell[0].mainColor;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);  
+    for (let i = 0; i < myCell.length; i++){
+        myCell[i].draw();
+    }    
 };
-// TODO: реализовать случайные числа
+
+start.onclick = function(){
+    if (start.innerText == 'пуск'){
+        timerId = setInterval(mainLoop, fps); 
+        start.innerText = 'стоп';
+    }else{
+        clearInterval(timerId);
+        start.innerText = 'пуск';
+    }
+};
+
+
 rndButton.onclick = function(){
     for (let i = 0; i < myCell.length; i++){
         myCell[i].mainColor = myCell[0].colorOff;
@@ -108,7 +140,7 @@ rndButton.onclick = function(){
     for (let i = 0; i < a.length; i++){
         myCell[a[i]].mainColor = myCell[0].colorOn;
         myCell[a[i]].draw(); 
-    }
+    }    
 };
 
 canvas.onmousedown = function(event){
