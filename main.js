@@ -80,15 +80,47 @@ function mainLoop(){
             }
         }
     }
+let life = [1];
+for (let i = 0; i < 9; i++){
+    if (life[i] == undefined){
+        life[i]= life[0];
+    }    
+}
+
+let dead = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+for (let i = 0; i < 9; i++){
+    if (dead[i] == undefined){
+        dead[i]= dead[0];
+    }    
+}
+console.log(dead);
 
     for (let i = 0; i < myCell.length; i++){
         // в пустой клетке, рядом с которой ровно три живые клетки, зарождается жизнь
-        if (myCell[i].mainColor == myCell[0].colorOff && myCell[i].neighbors == 3){
+        if (myCell[i].mainColor == myCell[0].colorOff && 
+            myCell[i].neighbors == life[0] ||
+            myCell[i].neighbors == life[1] ||
+            myCell[i].neighbors == life[2] ||
+            myCell[i].neighbors == life[3] ||
+            myCell[i].neighbors == life[4] ||
+            myCell[i].neighbors == life[5] ||
+            myCell[i].neighbors == life[6] ||
+            myCell[i].neighbors == life[7] ||
+            myCell[i].neighbors == life[8]){
             myCell[i].mainColor = myCell[0].colorOn;
         }
         // если у живой клетки есть две или три живые соседки, то эта клетка продолжает жить; 
         // в противном случае, если соседей меньше двух или больше трёх, клетка умирает («от одиночества» или «от перенаселённости»)
-        if (myCell[i].mainColor == myCell[0].colorOn && myCell[i].neighbors < 2 || myCell[i].neighbors > 3){
+        if (myCell[i].mainColor == myCell[0].colorOn && 
+            myCell[i].neighbors != dead[0] &&
+            myCell[i].neighbors != dead[1] &&
+            myCell[i].neighbors != dead[2] &&
+            myCell[i].neighbors != dead[3] &&
+            myCell[i].neighbors != dead[4] &&
+            myCell[i].neighbors != dead[5] &&
+            myCell[i].neighbors != dead[6] &&
+            myCell[i].neighbors != dead[7] &&
+            myCell[i].neighbors != dead[8]){
             myCell[i].mainColor = myCell[0].colorOff;
         }
         myCell[i].draw();    
