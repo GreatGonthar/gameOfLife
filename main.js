@@ -80,14 +80,14 @@ function mainLoop(){
             }
         }
     }
-let life = [1];
+let life = [3];
 for (let i = 0; i < 9; i++){
     if (life[i] == undefined){
         life[i]= life[0];
     }    
 }
 
-let dead = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+let dead = [2,3];
 for (let i = 0; i < 9; i++){
     if (dead[i] == undefined){
         dead[i]= dead[0];
